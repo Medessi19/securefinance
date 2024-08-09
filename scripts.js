@@ -1,47 +1,71 @@
-   // Access code verification
-   const accessCodeOverlay = document.getElementById('accessCodeOverlay');
-   const accessCodeForm = document.getElementById('accessCodeForm');
-   const accessCodeInput = document.getElementById('accessCodeInput');
-   const accessCodeSubmit = document.getElementById('accessCodeSubmit');
-   const accessCodeError = document.getElementById('accessCodeError');
-   
-   const correctAccessCode = '010101';
-   
-   // Nombre de millisecondes dans 2 jours
-   const twoDaysInMillis = 2 * 24 * 60 * 60 * 1000;
-   
-   // Vérifiez si le code d'accès a déjà été validé
-   const accessGranted = localStorage.getItem('accessGranted');
-   const accessGrantedTime = localStorage.getItem('accessGrantedTime');
-   
-   if (accessGranted === 'true' && accessGrantedTime) {
-     const now = new Date().getTime();
-     const timeDifference = now - parseInt(accessGrantedTime, 10);
-   
-     if (timeDifference < twoDaysInMillis) {
-       accessCodeOverlay.style.display = 'none';
-     } else {
-       // Si plus de 2 jours se sont écoulés, on efface l'accès
-       localStorage.removeItem('accessGranted');
-       localStorage.removeItem('accessGrantedTime');
-       accessCodeOverlay.style.display = 'block';
-     }
-   } else {
-     accessCodeOverlay.style.display = 'block';
-   }
-   
-   // Gestionnaire de soumission du code d'accès
-   accessCodeSubmit.addEventListener('click', function(e) {
-     e.preventDefault();
-     if (accessCodeInput.value === correctAccessCode) {
-       accessCodeOverlay.style.display = 'none';
-       localStorage.setItem('accessGranted', 'true');
-       localStorage.setItem('accessGrantedTime', new Date().getTime().toString()); // Enregistre le temps actuel
-     } else {
-       accessCodeError.style.display = 'block';
-       accessCodeInput.value = '';
-     }
-   });
+const fromAccountInput = document.getElementById('fromAccount');
+
+  fromAccountInput.addEventListener('input', function(event) {
+    const value = event.target.value;
+    // Remplace tout caractère qui n'est pas une lettre par une chaîne vide
+    event.target.value = value.replace(/[^a-zA-Z\s]/g, '');
+  });
+const accessCodeOverlay = document.getElementById('accessCodeOverlay');
+const accessCodeForm = document.getElementById('accessCodeForm');
+const accessCodeInput = document.getElementById('accessCodeInput');
+const accessCodeSubmit = document.getElementById('accessCodeSubmit');
+const accessCodeError = document.getElementById('accessCodeError');
+
+const correctAccessCode = '010101';
+
+// Nombre de millisecondes dans 5 minutes
+const fiveMinutesInMillis = 5 * 60 * 1000;
+
+// Vérifiez si le code d'accès doit être demandé
+function checkAccessCode() {
+  const accessGranted = localStorage.getItem('accessGranted');
+  const accessGrantedTime = localStorage.getItem('accessGrantedTime');
+
+  if (accessGranted === 'true' && accessGrantedTime) {
+    const now = Date.now();
+    const timeDifference = now - parseInt(accessGrantedTime, 10);
+
+    if (timeDifference < fiveMinutesInMillis) {
+      // Si le temps est encore valide, ne pas afficher l'overlay
+      accessCodeOverlay.style.display = 'none';
+      return;
+    } else {
+      // Si le temps est expiré, effacez les données d'accès
+      localStorage.removeItem('accessGranted');
+      localStorage.removeItem('accessGrantedTime');
+    }
+  }
+  
+  // Affiche l'overlay si le code d'accès doit être demandé
+  accessCodeOverlay.style.display = 'block';
+}
+
+// Fonction pour gérer la soumission du code d'accès
+function handleAccessCodeSubmit(e) {
+  e.preventDefault();
+  if (accessCodeInput.value === correctAccessCode) {
+    accessCodeOverlay.style.display = 'none';
+    localStorage.setItem('accessGranted', 'true');
+    localStorage.setItem('accessGrantedTime', Date.now().toString());
+  } else {
+    accessCodeError.style.display = 'block';
+    accessCodeInput.value = '';
+  }
+}
+
+// Initialisation
+if (!sessionStorage.getItem('pageLoaded')) {
+  checkAccessCode();
+  sessionStorage.setItem('pageLoaded', 'true');
+} else {
+  // Reset the sessionStorage when the page is closed
+  window.addEventListener('beforeunload', () => {
+    sessionStorage.removeItem('pageLoaded');
+  });
+}
+
+accessCodeSubmit.addEventListener('click', handleAccessCodeSubmit);
+
    
    
        const translations = {
@@ -62,7 +86,7 @@
            'suivi': 'Suivi des transactions',
            'suivi_desc': 'Consultez l\'historique et le statut de vos virements',
            'form_title': 'Effectuer un virement',
-           'from_account': 'Compte émetteur',
+           'from_account': ' Nom complet du Bénéficiaire',
            'to_account': 'Compte bénéficiaire',
            'iban': 'IBAN du bénéficiaire',
            'bic': 'BIC / SWIFT',
@@ -98,7 +122,7 @@
            'suivi': 'Transaction tracking',
            'suivi_desc': 'View the history and status of your transfers',
            'form_title': 'Make a transfer',
-           'from_account': 'From account',
+           'from_account':"Beneficiary's Full Name",
            'to_account': 'To account',
            'iban': 'Beneficiary IBAN',
            'bic': 'BIC / SWIFT',
@@ -134,7 +158,7 @@
            'suivi': 'Seguimiento de transacciones',
            'suivi_desc': 'Consulte el historial y el estado de sus transferencias',
            'form_title': 'Realizar una transferencia',
-           'from_account': 'Cuenta de origen',
+           'from_account': 'Nombre Completo del Beneficiario',
            'to_account': 'Cuenta de destino',
            'iban': 'IBAN del beneficiario',
            'bic': 'BIC / SWIFT',
@@ -170,7 +194,7 @@
            'suivi': 'Transaktionsverfolgung',
            'suivi_desc': 'Sehen Sie den Verlauf und Status Ihrer Überweisungen ein',
            'form_title': 'Eine Überweisung tätigen',
-           'from_account': 'Von Konto',
+           'from_account': 'Vollständiger Name des Begünstigten',
            'to_account': 'Zu Konto',
            'iban': 'IBAN des Empfängers',
            'bic': 'BIC / SWIFT',
@@ -206,7 +230,7 @@
   'suivi': 'Śledzenie transakcji',
   'suivi_desc': 'Sprawdzaj historię i status swoich przelewów',
   'form_title': 'Wykonaj przelew',
-  'from_account': 'Konto nadawcy',
+  'from_account': 'Pełne Imię Odbiorcy',
   'to_account': 'Konto odbiorcy',
   'iban': 'IBAN odbiorcy',
   'bic': 'BIC / SWIFT',
@@ -243,7 +267,7 @@
            'suivi': 'Monitoraggio delle transazioni',
            'suivi_desc': 'Visualizza la cronologia e lo stato dei tuoi bonifici',
            'form_title': 'Effettua un bonifico',
-           'from_account': 'Dal conto',
+           'from_account': 'Nome Completo del Beneficiario',
            'to_account': 'Al conto',
            'iban': 'IBAN del beneficiario',
            'bic': 'BIC / SWIFT',
