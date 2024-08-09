@@ -189,6 +189,43 @@
            'transaction_id': 'Transaktions-ID',
            'processing': 'Verarbeitung...'
          },
+         'pl': {
+  'accueil': 'Strona główna',
+  'services': 'Usługi',
+  'virement': 'Przelew',
+  'contact': 'Kontakt',
+  'bienvenue': 'Witamy w SecureFinance',
+  'subtitle': 'Twoja bezpieczna i efektywna platforma do przelewów',
+  'cta': 'Wykonaj przelew',
+  'virements': 'Natychmiastowe przelewy',
+  'virements_desc': 'Przelewaj środki w czasie rzeczywistym, 24/7',
+  'securite': 'Zaawansowane bezpieczeństwo',
+  'securite_desc': 'Twoje transakcje są chronione najnowocześniejszym szyfrowaniem',
+  'change': 'Wymiana walut',
+  'change_desc': 'Łatwo wymieniaj różne waluty',
+  'suivi': 'Śledzenie transakcji',
+  'suivi_desc': 'Sprawdzaj historię i status swoich przelewów',
+  'form_title': 'Wykonaj przelew',
+  'from_account': 'Konto nadawcy',
+  'to_account': 'Konto odbiorcy',
+  'iban': 'IBAN odbiorcy',
+  'bic': 'BIC / SWIFT',
+  'amount': 'Kwota',
+  'currency': 'Waluta',
+  'transfer_type': 'Rodzaj przelewu',
+  'description': 'Opis (opcjonalnie)',
+  'email': 'Adres e-mail',
+  'confirm_email': 'Potwierdź adres e-mail',
+  'phone': 'Numer telefonu',
+  'submit': 'Wykonaj przelew',
+  'footer': '© 2023 SecureFinance. Wszelkie prawa zastrzeżone.',
+  'transfer_success': 'Przelew zakończony sukcesem',
+  'amount_sent': 'Wysłana kwota',
+  'recipient': 'Odbiorca',
+  'transaction_id': 'ID transakcji',
+  'processing': 'Przetwarzanie...'
+},
+
          'it': {
            'accueil': 'Home',
            'services': 'Servizi',
@@ -225,7 +262,9 @@
            'transaction_id': 'ID transazione',
            'processing': 'Elaborazione in corso...'
          }
+         
        };
+       
    
        function translatePage(lang) {
          document.querySelectorAll('[data-translate]').forEach(element => {
